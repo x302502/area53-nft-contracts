@@ -21,12 +21,12 @@ contract Spaceship is Ownable, ReentrancyGuard, Pausable, ERC721, ISpaceship {
     string public baseUrl;
     address private nftDataStore;
 
-    EnumerableSet.AddressSet private minters;
+    mapping(address => bool) public minters;
 
     // Modifier checking Minter role
     modifier onlyMinter() {
         require(
-            msg.sender != ZERO_ADDRESS && minters.contains(msg.sender),
+            msg.sender != ZERO_ADDRESS && minters[msg.sender],
             "Spaceship: account not role minter"
         );
         _;
@@ -56,18 +56,8 @@ contract Spaceship is Ownable, ReentrancyGuard, Pausable, ERC721, ISpaceship {
         nonReentrant
         onlyOwner
     {
-        if (_isAdd) {
-            for (uint256 i = 0; i < _minters.length; i++) {
-                if (!minters.contains(_minters[i])) {
-                    minters.add(_minters[i]);
-                }
-            }
-        } else {
-            for (uint256 i = 0; i < _minters.length; i++) {
-                if (minters.contains(_minters[i])) {
-                    minters.remove(_minters[i]);
-                }
-            }
+        for (uint256 i = 0; i < _minters.length; i++) {
+            minters[_minters[i]] = _isAdd;
         }
     }
 
@@ -118,7 +108,7 @@ contract Spaceship is Ownable, ReentrancyGuard, Pausable, ERC721, ISpaceship {
     }
 
     function getAttributeValueOfTokenId(
-        bytes32 _attributeCode,
+        string memory _attributeCode,
         uint256 _tokenId
     ) external view override returns (uint256) {
         return

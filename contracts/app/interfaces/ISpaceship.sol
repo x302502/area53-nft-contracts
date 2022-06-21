@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 interface ISpaceship is IERC721 {
     function getAttributeValueOfTokenId(
-        bytes32 _attributeCode,
+        string memory _attributeCode,
         uint256 _tokenId
     ) external view returns (uint256);
 }

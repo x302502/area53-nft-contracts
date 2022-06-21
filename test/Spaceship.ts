@@ -59,8 +59,6 @@ describe("Spaceship", () => {
     nftFactory = await getContractFactory("Spaceship");
     nftStoreFactory = await getContractFactory("NftDataStore");
 
-
-
   })
 
 

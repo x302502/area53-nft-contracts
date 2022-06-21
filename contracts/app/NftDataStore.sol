@@ -12,19 +12,18 @@ import "./interfaces/INftDataStore.sol";
 contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
     address private constant ZERO_ADDRESS = address(0);
     using EnumerableSet for EnumerableSet.Bytes32Set;
-    using EnumerableSet for EnumerableSet.AddressSet;
 
     string public name;
     uint8 public version;
 
     EnumerableSet.Bytes32Set private attributeCodes;
 
-    EnumerableSet.AddressSet private admins;
+    mapping(address => bool) public admins;
 
     // Modifier checking Admin role
     modifier onlyAdmin() {
         require(
-            msg.sender != ZERO_ADDRESS && admins.contains(msg.sender),
+            msg.sender != ZERO_ADDRESS && admins[msg.sender],
             "NftDataStore: account not role admin"
         );
         _;
@@ -32,67 +31,32 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
     // attributeCode => tokenId => attribute value
     mapping(bytes32 => mapping(uint256 => uint256)) public mapAttribute;
 
-    function random() internal view returns (uint256) {
-        uint256 randomnumber = uint256(
-            keccak256(
-                abi.encodePacked(block.timestamp, block.difficulty, msg.sender)
-            )
-        );
-        return randomnumber;
-    }
-
     constructor(string memory _name, uint8 _version) {
         name = _name;
         version = _version;
-        transferOwnership(msg.sender);
-        admins.add(msg.sender);
+        admins[msg.sender] = true;
     }
 
-    function addAdmins(address[] memory _admins)
+    function updateAdmins(address[] memory _admins, bool _isAdd)
         external
         nonReentrant
         onlyOwner
     {
         for (uint256 i = 0; i < _admins.length; i++) {
-            if (!admins.contains(_admins[i])) {
-                admins.add(_admins[i]);
-            }
+            admins[_admins[i]] = _isAdd;
         }
     }
 
-    function removeAdmins(address[] memory _admins)
-        external
-        nonReentrant
-        onlyOwner
-    {
-        for (uint256 i = 0; i < _admins.length; i++) {
-            if (admins.contains(_admins[i])) {
-                admins.remove(_admins[i]);
-            }
-        }
-    }
-
-    function addAttributeCodes(string[] calldata _attributes)
+    function updateAttributeCodes(string[] calldata _attributes, bool _isAdd)
         external
         nonReentrant
         onlyAdmin
     {
         for (uint256 i = 0; i < _attributes.length; i++) {
             bytes32 attributeCode = keccak256(abi.encodePacked(_attributes[i]));
-            if (!attributeCodes.contains(attributeCode)) {
+            if (_isAdd) {
                 attributeCodes.add(attributeCode);
-            }
-        }
-    }
-
-    function removeAttributeCodes(string[] calldata _attributes)
-        external
-        nonReentrant
-        onlyAdmin
-    {
-        for (uint256 i = 0; i < _attributes.length; i++) {
-            bytes32 attributeCode = keccak256(abi.encodePacked(_attributes[i]));
-            if (attributeCodes.contains(attributeCode)) {
+            } else {
                 attributeCodes.remove(attributeCode);
             }
         }
@@ -114,9 +78,10 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
     }
 
     function getAttributeValueOfTokenId(
-        bytes32 _attributeCode,
+        string memory _attributeCode,
         uint256 _tokenId
     ) external view virtual override returns (uint256) {
-        return mapAttribute[_attributeCode][_tokenId];
+        bytes32 attributeCode = keccak256(abi.encodePacked(_attributeCode));
+        return mapAttribute[attributeCode][_tokenId];
     }
 }
