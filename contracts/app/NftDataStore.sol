@@ -24,8 +24,8 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
     // Modifier checking Admin role
     modifier onlyAdmin() {
         require(
-            admins.contains(msg.sender),
-            "FamLegendAttribute: account not role admin"
+            msg.sender != ZERO_ADDRESS && admins.contains(msg.sender),
+            "NftDataStore: account not role admin"
         );
         _;
     }
@@ -105,7 +105,7 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
     ) external nonReentrant onlyAdmin {
         require(
             _tokenIds.length == _values.length,
-            "FamLegendAttribute: input data invalid"
+            "NftDataStore: input data invalid"
         );
         bytes32 attributeCode = keccak256(abi.encodePacked(_attributeCode));
         for (uint256 i = 0; i < _tokenIds.length; i++) {
