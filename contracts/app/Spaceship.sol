@@ -23,6 +23,8 @@ contract Spaceship is Ownable, ReentrancyGuard, Pausable, ERC721, ISpaceship {
 
     mapping(address => bool) public minters;
 
+    event UpdateMinters(address[] indexed minters, bool isAdd);
+
     // Modifier checking Minter role
     modifier onlyMinter() {
         require(
@@ -59,6 +61,7 @@ contract Spaceship is Ownable, ReentrancyGuard, Pausable, ERC721, ISpaceship {
         for (uint256 i = 0; i < _minters.length; i++) {
             minters[_minters[i]] = _isAdd;
         }
+        emit UpdateMinters(_minters, _isAdd);
     }
 
     function pause() public onlyOwner {

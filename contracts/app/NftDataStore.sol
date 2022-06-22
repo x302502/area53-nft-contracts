@@ -20,6 +20,10 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
 
     mapping(address => bool) public admins;
 
+    event UpdateAdmins(address[] indexed admins, bool isAdd);
+
+    event UpdateAttributeCodes(string[] attributes, bool isAdd);
+
     // Modifier checking Admin role
     modifier onlyAdmin() {
         require(
@@ -45,6 +49,7 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
         for (uint256 i = 0; i < _admins.length; i++) {
             admins[_admins[i]] = _isAdd;
         }
+        emit UpdateAdmins(_admins, _isAdd);
     }
 
     function updateAttributeCodes(string[] calldata _attributes, bool _isAdd)
@@ -60,6 +65,7 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
                 attributeCodes.remove(attributeCode);
             }
         }
+        emit UpdateAttributeCodes(_attributes, _isAdd);
     }
 
     function updateDataByAttribute(
