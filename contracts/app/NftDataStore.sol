@@ -20,7 +20,7 @@ contract NftDataStore is Ownable, ReentrancyGuard, INftDataStore {
 
     mapping(address => bool) public admins;
 
-    event UpdateAdmins(address[] indexed admins, bool isAdd);
+    event UpdateAdmins(address[] admins, bool isAdd);
 
     event UpdateAttributeCodes(string[] attributes, bool isAdd);
 

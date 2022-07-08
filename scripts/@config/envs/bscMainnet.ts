@@ -34,7 +34,7 @@ const config: IEnvConfig = {
     // URL_WS: "wss://speedy-nodes-nyc.moralis.io/2960ee097d3b6231845dae26/bsc/mainnet/archive/ws",
     URL_SCAN: "https://bscscan.com"
   },
-  API_BASE_URL: "https://api-nft.famcentral.finance"
+  API_BASE_URL: "https://api.area53.asia".trim()
 }
 
 export default config;

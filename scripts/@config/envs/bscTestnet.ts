@@ -18,7 +18,7 @@ const config: IEnvConfig = {
     URL_WS: "wss://data-seed-prebsc-2-s2.binance.org:8545",
     URL_SCAN: "https://testnet.bscscan.com"
   },
-  API_BASE_URL: "https://qa-api-nft.famcentral.finance".trim()
+  API_BASE_URL: "https://api.area53.asia".trim()
 }
 
 export default config;

@@ -9,7 +9,16 @@
     "build": "yarn clean && yarn compile",
     "make-wallet": "NODE_ENV=bscMainnet hardhat run scripts/make-wallet.ts",
     "deploy-erc1155": "hardhat run scripts/deploy-erc1155.ts",
-    "deploy-erc721": "hardhat run scripts/deploy-erc721.ts"
+    "deploy-erc721": "hardhat run scripts/deploy-erc721.ts",
+    "dev": "hardhat run scripts/spaceship/dev.ts",
+    "spaceship:nft.deploy": "hardhat run scripts/spaceship/nft.deploy.ts",
+    "spaceship:nft.mint.task": "hardhat run scripts/spaceship/nft.mint.task.ts",
+    "spaceship:box.deploy": "hardhat run scripts/spaceship/box.deploy.ts",
+    "spaceship:update-minter-nft.task": "hardhat run scripts/spaceship/update-minter-nft.task.ts",
+    "spaceship:box.mint.task": "hardhat run scripts/spaceship/box.mint.task.ts",
+    "spaceship:pool-mint-box.deploy": "hardhat run scripts/spaceship/pool-mint-box.deploy.ts",
+    "spaceship:enable-open-box.task": "hardhat run scripts/spaceship/enable-open-box.task.ts",
+    "spaceship:update-minter-box.task": "hardhat run scripts/spaceship/update-minter-box.task.ts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",
